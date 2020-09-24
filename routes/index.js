@@ -7,9 +7,22 @@ router.get('/getOrders/:days', async (req, res, next) => {
   res.send(filesList.map((fileObj) => fileObj.name));
 });
 
-router.get('/getOrderData/:orderNumber', async (req, res, next) => {
-  const fileString = await Ftp.readFileFromFtp(req, res, req.params.orderNumber);
-  res.send(fileString);
+router.get('/getOrderData', async (req, res, next) => {
+
+  if(req.query.st !== process.env.SECRET) {
+    res.status(401).send('Unauth');
+    return;
+  }
+
+  const fileString = await Ftp.readFileFromFtp(req, res, req.query.orderNumber);
+
+  if(!fileString) {
+    res.send([]);
+  } else {
+    console.log("Gonna send order data from ftp");
+    res.send({ data: fileString });
+  }
+
 });
 
 /* GET home page. */
