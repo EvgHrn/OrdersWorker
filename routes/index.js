@@ -16,12 +16,8 @@ router.get('/getOrderData', async (req, res, next) => {
 
   const fileString = await Ftp.readFileFromFtp(req, res, req.query.orderNumber);
 
-  if(!fileString) {
-    res.send([]);
-  } else {
-    console.log("Gonna send order data from ftp");
-    res.send({ data: fileString });
-  }
+  console.log("Gonna send order data from ftp");
+  res.send(fileString ? { data: fileString } : {});
 
 });
 
