@@ -14,10 +14,10 @@ router.get('/getOrderData', async (req, res, next) => {
     return;
   }
 
-  const fileString = await Ftp.readFileFromFtp(req, res, req.query.orderNumber);
-
-  console.log("Gonna send order data from ftp");
-  res.send(fileString ? { data: fileString } : {});
+  await Ftp.readFileFromFtp(req, res, req.query.orderNumber);
+  //
+  // console.log("Gonna send order data from ftp");
+  // res.send(fileString ? { data: fileString } : {});
 
 });
 
