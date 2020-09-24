@@ -8,6 +8,7 @@ const app = require('../app');
 const debug = require('debug')('ordersworker:server');
 const https = require('https');
 const http = require('http');
+const fs = require('fs');
 
 /**
  * Get port from environment and store in Express.
