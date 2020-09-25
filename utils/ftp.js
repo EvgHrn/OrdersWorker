@@ -36,7 +36,7 @@ class Ftp {
         }
     }
 
-    static readFileFromFtp = async (fileName) => {
+    static readFileFromFtp = async (orderNumber) => {
         client.ftp.verbose = true;
         try {
             await client.access({
