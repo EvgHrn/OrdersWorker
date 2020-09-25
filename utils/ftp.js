@@ -5,8 +5,10 @@ const parse = require('date-fns/parse');
 const PromiseFtp = require('promise-ftp');
 const ftp = require("basic-ftp");
 const fs = require('fs');
+const iconv = require('iconv-lite');
 
 const ftpPromise = new PromiseFtp();
+const client = new ftp.Client();
 
 class Ftp {
 
@@ -34,24 +36,24 @@ class Ftp {
         }
     }
 
-    static readFileFromFtp = async (req, res, fileName) => {
-        const ftp = ftpPromise;
+    static readFileFromFtp = async (fileName) => {
+        client.ftp.verbose = true;
         try {
-            await ftp.connect({
-                    host: process.env.FTP_HOST,
-                    user: process.env.FTP_USER,
-                    password: process.env.FTP_PASSWORD
-                });
-            const stream = await ftp.get(`change/access/${fileName}`);
-            await new Promise((resolve, reject) => {
-                res.on('finish', resolve);
-                stream.once('error', reject);
-                stream.pipe(res);
+            await client.access({
+                host: process.env.FTP_HOST,
+                user: process.env.FTP_USER,
+                password: process.env.FTP_PASSWORD,
+                secure: false
             });
-        } catch(e) {
-            console.error(e);
-        } finally {
-            await ftp.end();
+            await client.downloadTo(`orders/${orderNumber}`, `/change/access/${orderNumber}`);
+            client.close();
+            const buff = fs.readFileSync(`orders/${orderNumber}`);
+            return iconv.decode(buff, 'win1251');
+        }
+        catch(err) {
+            console.log(err);
+            client.close();
+            return false;
         }
     }
 
