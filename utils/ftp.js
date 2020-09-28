@@ -45,9 +45,10 @@ class Ftp {
                 password: process.env.FTP_PASSWORD,
                 secure: false
             });
-            await client.downloadTo(`orders/${orderNumber}`, `/change/access/${orderNumber}`);
+            await client.downloadTo(`${orderNumber}`, `/change/access/${orderNumber}`);
             client.close();
-            const buff = fs.readFileSync(`orders/${orderNumber}`);
+            const buff = fs.readFileSync(`${orderNumber}`);
+            fs.unlinkSync(`${orderNumber}`);
             return iconv.decode(buff, 'win1251');
         }
         catch(err) {
