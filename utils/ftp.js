@@ -27,7 +27,7 @@ class Ftp {
             const fileList = await client.list('change/access');
             client.close();
             const filteredFileList = fileList.filter((fileObj) => isBefore(startDate, parse(fileObj.rawModifiedAt, 'MM-dd-yy hh:mmaa', new Date())));
-            return  filteredFileList;
+            return  filteredFileList.map((fileObj) => fileObj.name);
         }
         catch(err) {
             console.log(err);
