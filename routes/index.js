@@ -16,17 +16,23 @@ router.get('/getOrdersNumbersListByPeriod', async (req, res, next) => {
 
 });
 
-router.get('/getOrderData', async (req, res, next) => {
+router.get('/getOrderData', (req, res, next) => {
 
   if(req.query.st !== process.env.SECRET) {
     res.status(401).send('Unauth');
     return;
   }
 
-  const dataStr = await Ftp.readFileFromFtp(req.query.orderNumber);
+  Ftp.readFileFromFtp(req.query.orderNumber)
+      .then((dataStr) => {
+        console.log("Gonna send order data from ftp");
+        res.send({ data: dataStr });
+      })
+
+  // const dataStr = await Ftp.readFileFromFtp(req.query.orderNumber);
   //
-  console.log("Gonna send order data from ftp");
-  res.send({ data: dataStr });
+  // console.log("Gonna send order data from ftp");
+  // res.send({ data: dataStr });
 
 });
 
