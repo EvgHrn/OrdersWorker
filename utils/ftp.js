@@ -2,12 +2,10 @@
 const sub = require('date-fns/sub');
 const isBefore = require('date-fns/isBefore');
 const parse = require('date-fns/parse');
-const PromiseFtp = require('promise-ftp');
 const ftp = require("basic-ftp");
 const fs = require('fs');
 const iconv = require('iconv-lite');
 
-const ftpPromise = new PromiseFtp();
 const client = new ftp.Client();
 
 class Ftp {
@@ -23,11 +21,16 @@ class Ftp {
                 password: process.env.FTP_PASSWORD,
                 secure: false
             });
-            // console.log(await client.list('change/access'));
             const fileList = await client.list('change/access');
             client.close();
-            const filteredFileList = fileList.filter((fileObj) => isBefore(startDate, parse(fileObj.rawModifiedAt, 'MM-dd-yy hh:mmaa', new Date())));
-            return  filteredFileList.map((fileObj) => fileObj.name);
+            return fileList.reduce((acc, fileObj) => {
+                const isInPeriod = isBefore(startDate, parse(fileObj.rawModifiedAt, 'MM-dd-yy hh:mmaa', new Date()));
+                const orderNumberInt = parseInt(fileObj.name);
+                if(isInPeriod && !!orderNumberInt) {
+                    acc.push(orderNumberInt);
+                }
+                return acc;
+            }, []);
         }
         catch(err) {
             console.log(err);
