@@ -11,7 +11,7 @@ router.get('/getOrdersNumbersListByPeriod', async (req, res, next) => {
 
   const list = await Ftp.getFilesList(req.query.periodDays);
   //
-  console.log("Gonna send orders list from ftp");
+  console.log("Gonna send orders list from ftp with length: ", list ? list.length : 0);
   res.send(list);
 
 });

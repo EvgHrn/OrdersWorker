@@ -6,7 +6,7 @@ const ftp = require("basic-ftp");
 const fs = require('fs');
 const iconv = require('iconv-lite');
 
-const client = new ftp.Client();
+// const client = new ftp.Client();
 
 class Ftp {
 
@@ -22,6 +22,7 @@ class Ftp {
                 secure: false
             });
             const fileList = await client.list('change/access');
+            console.log("Got files list: ", fileList);
             client.close();
             return fileList.reduce((acc, fileObj) => {
                 const isInPeriod = isBefore(startDate, parse(fileObj.rawModifiedAt, 'MM-dd-yy hh:mmaa', new Date()));
@@ -33,7 +34,7 @@ class Ftp {
             }, []);
         }
         catch(err) {
-            console.log(err);
+            console.log("Ftp error: ", err);
             client.close();
             return false;
         }
