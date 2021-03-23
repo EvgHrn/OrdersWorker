@@ -36,6 +36,26 @@ router.get('/getOrderData', (req, res, next) => {
 
 });
 
+router.get('/getOrderFileModifiedAtStr', (req, res, next) => {
+
+  if(req.query.st !== process.env.SECRET) {
+    res.status(401).send('Unauth');
+    return;
+  }
+
+  Ftp.getOrderFileModifiedAtStr(req.query.orderNumber)
+      .then((dataStr) => {
+        console.log("Gonna send order ModifiedAt from ftp");
+        res.send(dataStr);
+      })
+
+  // const dataStr = await Ftp.readFileFromFtp(req.query.orderNumber);
+  //
+  // console.log("Gonna send order data from ftp");
+  // res.send({ data: dataStr });
+
+});
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
