@@ -40,6 +40,35 @@ class Ftp {
         }
     }
 
+    static getOrdersInfoByPeriod = async (days) => {
+        const client = new ftp.Client();
+        client.ftp.verbose = true;
+        const startDate = sub(new Date(), { days: days });
+        try {
+            await client.access({
+                host: process.env.FTP_HOST,
+                user: process.env.FTP_USER,
+                password: process.env.FTP_PASSWORD,
+                secure: false
+            });
+            const fileList = await client.list('change/access');
+            console.log("Got files list: ", fileList);
+            client.close();
+            return fileList.reduce((acc, fileObj) => {
+                const isInPeriod = isBefore(startDate, parse(fileObj.rawModifiedAt, 'MM-dd-yy hh:mmaa', new Date()));
+                if(isInPeriod) {
+                    acc.push(fileObj);
+                }
+                return acc;
+            }, []);
+        }
+        catch(err) {
+            console.log("Ftp error: ", err);
+            client.close();
+            return false;
+        }
+    }
+
     static getOrderFileModifiedAtStr = async (orderNumber) => {
         const client = new ftp.Client();
         client.ftp.verbose = true;
