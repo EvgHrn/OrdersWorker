@@ -22,7 +22,7 @@ class Ftp {
                 secure: false
             });
             const fileList = await client.list('/home/ftpuser/orders');
-            console.log("Got files list: ", fileList);
+            console.log("Got files list with length: ", fileList.length);
             client.close();
             return fileList.reduce((acc, fileObj) => {
                 const isInPeriod = isBefore(startDate, parse(fileObj.rawModifiedAt, 'MM-dd-yy hh:mmaa', new Date()));
