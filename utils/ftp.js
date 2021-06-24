@@ -21,7 +21,7 @@ class Ftp {
                 password: process.env.FTP_PASSWORD,
                 secure: false
             });
-            const fileList = await client.list('change/access');
+            const fileList = await client.list('/home/ftpuser/orders');
             console.log("Got files list: ", fileList);
             client.close();
             return fileList.reduce((acc, fileObj) => {
@@ -51,7 +51,7 @@ class Ftp {
                 password: process.env.FTP_PASSWORD,
                 secure: false
             });
-            const fileList = await client.list('change/access');
+            const fileList = await client.list('/home/ftpuser/orders');
             console.log("Got files list: ", fileList);
             client.close();
             return fileList.reduce((acc, fileObj) => {
@@ -79,7 +79,7 @@ class Ftp {
                 password: process.env.FTP_PASSWORD,
                 secure: false
             });
-            const fileList = await client.list('change/access');
+            const fileList = await client.list('/home/ftpuser/orders');
             // console.log("Got files list: ", fileList);
             client.close();
             const file = fileList.find((fileObj) => fileObj.name === orderNumber.toString());
@@ -118,7 +118,7 @@ class Ftp {
                 password: process.env.FTP_PASSWORD,
                 secure: false
             });
-            await client.downloadTo(`${orderNumber}`, `/change/access/${orderNumber}`);
+            await client.downloadTo(`${orderNumber}`, `/home/ftpuser/orders/${orderNumber}`);
             client.close();
             const buff = fs.readFileSync(`${orderNumber}`);
             fs.unlinkSync(`${orderNumber}`);
@@ -184,7 +184,7 @@ class Ftp {
         const excelFileResult = await this.createExcel(fileName, tours, []);
         if (excelFileResult) {
             console.log("Excel created");
-            const uploadingResult = await this.uploadFileToFtp(fileName, `/change/access/${fileName}`);
+            const uploadingResult = await this.uploadFileToFtp(fileName, `/home/ftpuser/orders/${fileName}`);
             if(uploadingResult) {
                 console.log("Excel file uploaded");
             } else {
