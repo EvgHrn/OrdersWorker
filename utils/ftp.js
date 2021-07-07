@@ -55,7 +55,7 @@ class Ftp {
             console.log("Got files list: ", fileList);
             client.close();
             return fileList.reduce((acc, fileObj) => {
-                const isInPeriod = isBefore(startDate, parse(fileObj.rawModifiedAt, 'MM-dd-yy hh:mmaa', new Date()));
+                const isInPeriod = isBefore(startDate, parse(fileObj.rawModifiedAt, 'MMM dd HH:mm', new Date()));
                 if(isInPeriod) {
                     acc.push(fileObj);
                 }
