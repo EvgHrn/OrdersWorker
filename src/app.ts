@@ -5,6 +5,7 @@ const logger = require('morgan');
 const watcher = require('./utils/watcher');
 const https = require('https');
 const fsSync = require('fs');
+const bodyParser = require("body-parser");
 
 const indexRouter = require('./routes');
 // const usersRouter = require('./routes/users');
@@ -13,9 +14,11 @@ require('dotenv').config();
 
 const app = express();
 
+app.use(bodyParser.urlencoded({limit: '10mb', extended: true}));
+app.use(bodyParser.json({limit: '10mb', extended: true}));
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 

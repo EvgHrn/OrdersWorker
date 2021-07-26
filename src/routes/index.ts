@@ -5,7 +5,6 @@ const router = express.Router();
 const iconv = require('iconv-lite');
 const fs = require('fs').promises;
 const fsSyncB = require('fs');
-// const Ftp = require('../utils/ftp');
 
 router.get('/getOrdersNumbersListByPeriod', async (req, res, next) => {
 
@@ -83,8 +82,8 @@ router.get('/getOrderData', (req, res, next) => {
 // });
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+// router.get('/', function(req, res, next) {
+//   res.render('index', { title: 'Express' });
+// });
 
 module.exports = router;

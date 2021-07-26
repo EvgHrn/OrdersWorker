@@ -6,12 +6,12 @@ const db = require('./db');
 const pathB = require('path');
 const iconv = require('iconv-lite');
 
-const orders = require('./orders');
+// const orders = require('./orders');
 
-const getOrderNumberFromPath = (pathStr: string) => {
-  const arr = pathStr.split('/');
-  return arr[arr.length - 1];
-}
+// const getOrderNumberFromPath = (pathStr: string) => {
+//   const arr = pathStr.split('/');
+//   return arr[arr.length - 1];
+// }
 
 async function readFile(filePath: string): Promise<string> {
     try {
@@ -39,7 +39,7 @@ module.exports.watch = function () {
 
     watcher.on('add', async(filePath: string) => {
       const fileName = pathB.basename(filePath);
-      const orderNumber = parseInt(fileName);
+      const orderNumber = parseInt(fileName, 10);
       if(!orderNumber) {
           console.log(`${new Date().toLocaleString()} Wrong file name ${fileName} for ${filePath}`);
           return;
