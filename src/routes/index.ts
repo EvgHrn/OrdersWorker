@@ -23,7 +23,7 @@ router.get('/getOrdersNumbersListByPeriod', async (req, res, next) => {
     const modifiedDate: Date = fileStat.mtime;
     const startDate = sub(new Date(), { days: req.query.periodDays });
     const isInPeriod = isBefore(startDate, new Date(modifiedDate)); // Jun 24 05:26
-    const orderNumberInt = parseInt(fileName);
+    const orderNumberInt = parseInt(fileName, 10);
     if(isInPeriod && !!orderNumberInt) {
       current.push(orderNumberInt);
     }
