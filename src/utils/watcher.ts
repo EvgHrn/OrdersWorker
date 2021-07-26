@@ -2,12 +2,13 @@ const chokidar = require('chokidar');
 const fs = require('fs').promises;
 const db = require('./db');
 const pathB = require('path');
+const iconv = require('iconv-lite');
 
 async function readFile(filePath: string): Promise<string> {
     try {
       const data = await fs.readFile(filePath);
         // console.log(data.toString());
-      return data.toString();
+      return iconv.decode(data, "cp1251").toString();
     } catch (error) {
       console.error(`${new Date().toLocaleString()} Got an error trying to read the file: ${error.message}`);
       return '';
