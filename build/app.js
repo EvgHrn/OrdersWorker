@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const watcher = require('./utils/watcher');
 const https = require('https');
+const fsSync = require('fs');
 const indexRouter = require('./routes');
 // const usersRouter = require('./routes/users');
 require('dotenv').config();
@@ -24,9 +25,9 @@ app.use('/', indexRouter);
 watcher.watch();
 const port = process.env.PORT;
 const server = https.createServer({
-    key: fs.readFileSync(process.env.SERT_KEY),
-    cert: fs.readFileSync(process.env.SERT_CERT),
-    ca: fs.readFileSync(process.env.SERT_CA)
+    key: fsSync.readFileSync(process.env.SERT_KEY),
+    cert: fsSync.readFileSync(process.env.SERT_CERT),
+    ca: fsSync.readFileSync(process.env.SERT_CA)
 }, app);
 server.listen(port);
 module.exports = app;

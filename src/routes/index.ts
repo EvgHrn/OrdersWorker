@@ -3,6 +3,8 @@ import {isBefore, sub} from "date-fns";
 const express = require('express');
 const router = express.Router();
 const iconv = require('iconv-lite');
+const fs = require('fs').promises;
+const fsSyncB = require('fs');
 // const Ftp = require('../utils/ftp');
 
 router.get('/getOrdersNumbersListByPeriod', async (req, res, next) => {
@@ -12,19 +14,20 @@ router.get('/getOrdersNumbersListByPeriod', async (req, res, next) => {
     return;
   }
 
-  const filesList = await fs.readDir(process.env.ORDERS_PATH);
+  const filesList = await fs.readdir(process.env.ORDERS_PATH);
   console.log(`${new Date().toLocaleString()} Got files list with length: ${filesList.length}`);
 
   const list = await filesList.reduce(async (acc, fileName: string  ) => {
+    const current = await acc;
     const fileStat = await fs.stat(`${process.env.ORDERS_PATH}/${fileName}`);
     const modifiedDate: Date = fileStat.mtime;
     const startDate = sub(new Date(), { days: req.query.periodDays });
-    const isInPeriod = isBefore(startDate, new Date(modifiedDate)); //Jun 24 05:26
+    const isInPeriod = isBefore(startDate, new Date(modifiedDate)); // Jun 24 05:26
     const orderNumberInt = parseInt(fileName);
     if(isInPeriod && !!orderNumberInt) {
-        acc.push(orderNumberInt);
+      current.push(orderNumberInt);
     }
-    return acc;
+    return current;
   }, Promise.resolve([] as number[]));
 
   console.log("Gonna send orders list with length: ", list ? list.length : 0);
@@ -39,7 +42,7 @@ router.get('/getOrderData', (req, res, next) => {
     return;
   }
 
-  const buff = fs.readFileSync(`${process.env.ORDERS_PATH}/${req.query.orderNumber}`);
+  const buff = fsSyncB.readFileSync(`${process.env.ORDERS_PATH}/${req.query.orderNumber}`);
   const dataStr = iconv.decode(buff, 'win1251');
 
   res.send({ data: dataStr });

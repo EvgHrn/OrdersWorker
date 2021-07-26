@@ -13,6 +13,7 @@ const date_fns_1 = require("date-fns");
 const express = require('express');
 const router = express.Router();
 const iconv = require('iconv-lite');
+const fs = require('fs').promises;
 // const Ftp = require('../utils/ftp');
 router.get('/getOrdersNumbersListByPeriod', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     if (req.query.st !== process.env.SECRET) {

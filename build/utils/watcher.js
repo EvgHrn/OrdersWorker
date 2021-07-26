@@ -9,9 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 const chokidar = require('chokidar');
-// const Ftp = require('./ftp');
 const fs = require('fs').promises;
-// const path = require('path');
 const db = require('./db');
 function readFile(filePath) {
     return __awaiter(this, void 0, void 0, function* () {

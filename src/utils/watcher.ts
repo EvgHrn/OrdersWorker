@@ -1,8 +1,7 @@
 const chokidar = require('chokidar');
-// const Ftp = require('./ftp');
 const fs = require('fs').promises;
-// const path = require('path');
 const db = require('./db');
+const pathB = require('path');
 
 async function readFile(filePath: string): Promise<string> {
     try {
@@ -34,7 +33,7 @@ module.exports.watch = function () {
     );
 
     watcher.on('add', async(filePath: string) => {
-        const fileName = path.basename(filePath);
+        const fileName = pathB.basename(filePath);
         const orderNumber = parseInt(fileName);
         if(!orderNumber) {
             console.log(`${new Date().toLocaleString()} Wrong file name ${fileName} for ${filePath}`);
