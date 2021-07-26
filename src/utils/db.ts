@@ -86,9 +86,9 @@ module.exports.getDbState = () => {
     return db_connection.readyState;
 };
 
-module.exports.createOrder = async (number: number, dataString: string, modifiedAt: Date) => {
+module.exports.createOrder = async (orderNumber: number, dataString: string, modifiedAt: Date) => {
 
-    const order = new Order({ number, dataString, modifiedAt });
+    const order = new Order({ number: orderNumber, dataString, modifiedAt });
 
     try {
         const result = await order.save();
@@ -99,12 +99,12 @@ module.exports.createOrder = async (number: number, dataString: string, modified
     }
 };
 
-module.exports.updateOrder = async (number: number, dataString: string, modifiedAt: Date) => {
+module.exports.updateOrder = async (orderNumber: number, dataString: string, modifiedAt: Date) => {
 
     // const order = new Order({ number, dataString, modifiedAt });
 
     try {
-        const result = await Order.updateOne({ number: number }, { dataString: dataString, modifiedAt: modifiedAt });
+        const result = await Order.updateOne({ number: orderNumber }, { dataString, modifiedAt });
         return result ? result : false;
     } catch (err) {
         console.error('updateOrder error: ', err);
@@ -112,9 +112,9 @@ module.exports.updateOrder = async (number: number, dataString: string, modified
     }
 };
 
-module.exports.getOrderByNumber = async (number: number) => {
+module.exports.getOrderByNumber = async (orderNumber: number) => {
     try {
-        const orderObj = await Order.findOne({ number: number }).exec();
+        const orderObj = await Order.findOne({ number: orderNumber }).exec();
         return orderObj ? orderObj : false;
     } catch (e) {
         console.error("Getting order error: ", e);

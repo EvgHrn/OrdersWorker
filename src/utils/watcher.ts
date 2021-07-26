@@ -53,7 +53,7 @@ module.exports.watch = function () {
         console.log(`${new Date().toLocaleString()} File ${fileName} created on: `, creationDate);
 
         console.log(`${new Date().toLocaleString()} Gonna create order ${fileName} on db`);
-        const newOrder = await db.createOrder(orderNumber,fileStr, creationDate);
+        const newOrder = await db.createOrder(orderNumber, fileStr, creationDate);
         console.log(`${new Date().toLocaleString()} Created order in db: `, newOrder);
     });
 
